@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = Routes.root;
+  static const initial = Routes.home;
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {

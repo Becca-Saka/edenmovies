@@ -93,8 +93,8 @@ class ApiBaseHelper {
 
 Future<ApiResponse> _response(StreamedResponse response) async {
   if (response.statusCode == 200) {
-    final responseBody = json.decode(await response.stream.bytesToString());
-    log('Response: $responseBody');
+    // final responseBody = json.decode(await response.stream.bytesToString());
+    // log('Response: $responseBody');
     return ApiResponse.fromJson(
         json.decode(await response.stream.bytesToString()));
   } else if (response.statusCode >= 400 && response.statusCode <= 499) {
