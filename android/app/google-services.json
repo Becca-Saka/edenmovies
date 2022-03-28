@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "980195801954",
+    "project_id": "edenmovies-58777",
+    "storage_bucket": "edenmovies-58777.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980195801954:android:19a398474fef32fadaca3b",
+        "android_client_info": {
+          "package_name": "com.example.edenmovies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980195801954-k1fp2t8etv1ojav0via14pkemih6qpeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiv2i5zTuGI4rtF9P8kSi3usmDIsJIoXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980195801954-k1fp2t8etv1ojav0via14pkemih6qpeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
