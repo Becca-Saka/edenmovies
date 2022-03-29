@@ -1,3 +1,4 @@
+import 'package:edenmovies/app/routes/app_pages.dart';
 import 'package:edenmovies/models/movie_details.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class HorizontalMovieList extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = size.height;
-    var list = [];
+    List<MovieDetails> list = [];
     list = movies.where((element) => element.genres.contains(title)).toList();
     list.shuffle();
     return Column(
@@ -38,26 +39,35 @@ class HorizontalMovieList extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: list.length,
             itemBuilder: (context, index) {
+              final item = list[index];
               return Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: FancyShimmerImage(
-                      imageUrl: list[index].posterurl,
-                      boxFit: BoxFit.cover,
-                      errorWidget: const Icon(Icons.error),
-                      width: 100,
-                      
-                      // height: 100,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.singleFeedItem,
+                        arguments: {
+                          'movieDetails': item,
+                          'tag': '${item.id}+$title'
+                        },
+                      );
+                    },
+                    child: Hero(
+                      tag: '${item.id}+$title',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: FancyShimmerImage(
+                          imageUrl: list[index].posterurl,
+                          boxFit: BoxFit.cover,
+                          errorWidget: const Placeholder(color: Colors.grey ,),
+                          width: 100,
+
+                          // height: 100,
+                        ),
+                      ),
                     ),
                   ),
-                  // Image.network(
-                  //   list[index].posterurl,
-                  //   fit: BoxFit.cover,
-                  //   errorBuilder: (context, url, error) {
-                  //     return const Icon(Icons.error);
-                  //   },
-                  // ),
                   SizedBox(
                     width: index == list.length - 1 ? 0 : 5,
                   ),

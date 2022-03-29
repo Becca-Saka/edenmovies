@@ -1,6 +1,7 @@
 import 'package:edenmovies/app/locator.dart';
 import 'package:edenmovies/app/routes/app_pages.dart';
 import 'package:edenmovies/controller/authentication_controller.dart';
+import 'package:edenmovies/controller/feed_controller.dart';
 import 'package:edenmovies/helpers/snackbar_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AuthenticationController(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthenticationController>(
+          create: (_) => AuthenticationController(),
+        ),
+        ChangeNotifierProvider<FeedController>(
+          create: (_) => FeedController(),
+        ),
+      ],
       child: MaterialApp(
         navigatorKey: NavigationHelper.navigatorKey,
         scaffoldMessengerKey: SnackBarHelper.rootScaffoldMessengerKey,

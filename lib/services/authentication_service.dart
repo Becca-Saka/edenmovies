@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edenmovies/app/locator.dart';
 import 'package:edenmovies/app/routes/app_pages.dart';
+import 'package:edenmovies/controller/feed_controller.dart';
 import 'package:edenmovies/helpers/navigation_helper.dart';
 import 'package:edenmovies/helpers/snackbar_helper.dart';
 import 'package:edenmovies/models/user_details.dart';
@@ -15,7 +16,6 @@ class AuthenticatinService {
 
   final _navigator = locator<NavigationHelper>();
 
-//TODO: add loading state
   Future<void> signUp(String email, String password, String name) async {
     try {
       _navigator.showLoadingDialogWithText(msg: 'Signing up...');
@@ -43,13 +43,13 @@ class AuthenticatinService {
 
   Future<void> signIn(String email, String password) async {
     try {
-      // _navigator.showLoadingDialogWithText(msg: 'Signing in...');
-      // User? user = (await _firebaseAuth.signInWithEmailAndPassword(
-      //         email: email, password: password))
-      //     .user;
-      // if (user != null) {
+      _navigator.showLoadingDialogWithText(msg: 'Signing in...');
+      User? user = (await _firebaseAuth.signInWithEmailAndPassword(
+              email: email, password: password))
+          .user;
+      if (user != null) {
         await getUserData();
-      // }
+      }
     } on FirebaseAuthException catch (e) {
       log('Error: $e');
       _navigator.back();
@@ -76,19 +76,34 @@ class AuthenticatinService {
   }
 
   Future<void> getUserData() async {
-    // final u = _firebaseAuth.currentUser!.uid;
-    // final res = await _userCollectionRef.doc(u).get();
-    // if (res.data() != null) {
-    //   final data = res.data() as Map<String, dynamic>;
-    //   final user = UserDetails.fromJson(data);
-    //   _navigator.back();
+    final u = _firebaseAuth.currentUser!.uid;
+    final res = await _userCollectionRef.doc(u).get();
+    if (res.data() != null) {
+      final data = res.data() as Map<String, dynamic>;
+      final user = UserDetails.fromJson(data);
+      locator<FeedController>().updateUserDetails(user);
+      _navigator.back();
       _navigator.navigateTo(Routes.home);
-    // }
+    }
   }
 
-  User? getCurrentUser() => _firebaseAuth.currentUser;
+  saveUserWatchList(UserDetails user) async => await _userCollectionRef
+      .doc(user.uid)
+      .update({'watchList': user.watchList});
 
   Future<void> signOut() async => _firebaseAuth.signOut();
+
+  Future<bool> isSignIn() async {
+    User? user = _firebaseAuth.currentUser;
+    if (user != null) {
+      final result = await user.getIdTokenResult(true);
+      log('returning true');
+      return result.token != null ? true : false;
+    
+    }
+    log('returning false');
+    return false;
+  }
 }
 
 String getMessageFromErrorCode(FirebaseAuthException e) {

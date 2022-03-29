@@ -1,7 +1,4 @@
-import 'dart:typed_data';
 import 'package:edenmovies/helpers/api_base_helper.dart';
-import 'package:edenmovies/helpers/api_response.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http; 
 ApiBaseHelper _helper = ApiBaseHelper();
 

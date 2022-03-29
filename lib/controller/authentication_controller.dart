@@ -11,7 +11,7 @@ class AuthenticationController extends ChangeNotifier {
   String get password => _password;
   String _password = '';
   final AuthenticatinService _authenticationService = AuthenticatinService();
-final NavigationHelper _navigator  = NavigationHelper();
+  final NavigationHelper _navigator = NavigationHelper();
   void updateEmail(String email) {
     _email = email;
     notifyListeners();
@@ -26,15 +26,16 @@ final NavigationHelper _navigator  = NavigationHelper();
     _password = password;
     notifyListeners();
   }
-  gotoLogin()=> _navigator.navigateTo(Routes.login);
-  gotoSignUp()=> _navigator.back();
+
+  gotoLogin() => _navigator.navigateTo(Routes.login);
+  gotoSignUp() => _navigator.back();
 
   void login() {
     _authenticationService.signOut();
     _authenticationService.signIn(email, password);
-    print("Login");
   }
 
-  Future<void> signUp() async => await   _authenticationService.signUp(email, password, name);
-
+  Future<void> signUp() async =>
+      await _authenticationService.signUp(email, password, name);
+     Future<bool> isSignIn() => _authenticationService.isSignIn();
 }
