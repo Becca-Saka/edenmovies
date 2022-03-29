@@ -15,11 +15,9 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<FeedController>(
       onModelReady: (controller) async {
-      // WidgetsBinding.instance!.addPostFrameCallback((_) {});
-      log('WatchListView onModelReady');
       
       await controller.getData();
-      await controller.getUserWatchList();
+
     },
       builder: (context, controller, child) {
       return Scaffold(

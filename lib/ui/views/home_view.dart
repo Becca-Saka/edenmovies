@@ -1,7 +1,8 @@
-
+import 'package:edenmovies/app/app_state.dart';
 import 'package:edenmovies/controller/feed_controller.dart';
 import 'package:edenmovies/ui/shared/const_color.dart';
 import 'package:edenmovies/ui/widgets/horizontal_list_item.dart';
+import 'package:edenmovies/ui/widgets/loading_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'base_view.dart';
@@ -14,53 +15,54 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-
   @override
   Widget build(BuildContext context) {
     return BaseView<FeedController>(builder: (context, controller, child) {
       return Scaffold(
-        backgroundColor:  appColor2,
+        backgroundColor: appColor2,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(
-                    height: 20,
+            child: controller.state == AppState.busy
+                ? const LoadingPlaceholder()
+                : SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Hello ${controller.currentUser.name}',
+                          style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const Text(
+                          'Let\'s explore the upcoming movies',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white),
+                        ),
+                        _popularMovies(
+                            controller, MediaQuery.of(context).size.height),
+                        ListView(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: controller.genres
+                              .map((e) => HorizontalMovieList(
+                                  movies: controller.movies, title: e))
+                              .toList(),
+                        ),
+                      ],
+                    ),
                   ),
-                  const Text(
-                    'Hello User',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Text(
-                    'Lets explore the upcoming movies',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
-                  ),
-                  _popularMovies(
-                      controller, MediaQuery.of(context).size.height),
-                  ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: controller.genres
-                        .map((e) => HorizontalMovieList(
-                            movies: controller.movies, title: e))
-                        .toList(),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       );
@@ -72,7 +74,7 @@ class _HomeViewState extends State<HomeView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(
-          height: 30,
+          height: 35,
         ),
         const Text(
           'Popular Movies',
@@ -80,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(
-          height: 15,
+          height: 20,
         ),
         SizedBox(
           height: height * 0.3,
@@ -112,10 +114,6 @@ class _HomeViewState extends State<HomeView> {
                               Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    // onError: ((exception, stackTrace) {
-                                    //   img = Icon(Icons.cabin);
-                                    //   controller.setAppState(AppState.idle);
-                                    // }),
                                     image: img,
                                     fit: BoxFit.cover,
                                   ),
@@ -164,6 +162,4 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
-
-//TODO: add on image error widget
 

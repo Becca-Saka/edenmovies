@@ -13,9 +13,7 @@ import 'package:edenmovies/services/authentication_service.dart';
 class FeedController extends StateController {
   List<MovieDetails> movies = [];
   List<MovieDetails> popular = [];
-  List<MovieDetails> get watchList => movies
-      .where((movie) => currentUser.watchList.contains(movie.id))
-      .toList();
+  List<MovieDetails> watchList = [];
   List<String> genres = [];
 
   final NavigationHelper _navigator = locator<NavigationHelper>();
@@ -24,12 +22,14 @@ class FeedController extends StateController {
   var currentIndex = 0;
 
   getData() async {
+    setAppState(AppState.busy);
     final data = await ApiRepository().getData();
     final jsonData = json.decode(data) as List<dynamic>;
     movies = jsonData.map((movie) => MovieDetails.fromJson(movie)).toList();
     _parseDataList();
-    log('${popular.length} ${movies.length} ');
-    notifyListeners();
+    
+    setAppState(AppState.idle);
+    
   }
 
   _parseDataList() {
@@ -44,16 +44,15 @@ class FeedController extends StateController {
       if (e.imdbRating.runtimeType == String) {
         e.imdbRating = 0.0;
       }
-
       return e;
     }).toList();
     popular = movies.where((movie) => movie.imdbRating >= 7.5).toList();
+    getUserWatchList();
   }
 
-  navigateToSingleItem(MovieDetails movieDetails, String tag) {
-    _navigator.navigateTo(Routes.singleFeedItem,
-        arguments: {'movieDetails': movieDetails, 'tag': tag});
-  }
+  navigateToSingleItem(MovieDetails movieDetails, String tag) =>
+      _navigator.navigateTo(Routes.singleFeedItem,
+          arguments: {'movieDetails': movieDetails, 'tag': tag});
 
   void onTabChanged(int value) {
     currentIndex = value;
@@ -69,11 +68,12 @@ class FeedController extends StateController {
     List<String> list = [...currentUser.watchList];
     list.contains(movie.id) ? list.remove(movie.id) : list.add(movie.id);
     currentUser.watchList = list;
+    getUserWatchList();
     notifyListeners();
     await AuthenticatinService().saveUserWatchList(currentUser);
   }
 
-  getUserWatchList() {
-    notifyListeners();
-  }
+  getUserWatchList() => watchList = movies
+      .where((movie) => currentUser.watchList.contains(movie.id))
+      .toList();
 }

@@ -32,11 +32,13 @@ dependencies:
   fancy_shimmer_image: ^2.0.2
   firebase_auth: ^3.3.11
   firebase_core: ^1.13.1
+  
   flutter:
     sdk: flutter
   get_it: ^7.2.0
   http: ^0.13.4
   provider: ^6.0.2
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.0

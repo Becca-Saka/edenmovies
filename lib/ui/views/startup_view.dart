@@ -23,11 +23,10 @@ class _StartUpViewState extends State<StartUpView> {
     final auth = locator<AuthenticationController>();
     final _navigator = locator<NavigationHelper>();
     final status = await auth.isSignIn();
-    
     if (status) {
-      _navigator.closeAndNavigateTo(Routes.mainView);
+      _navigator.closeAllAndNavigateTo(Routes.mainView);
     } else {
-      _navigator.closeAndNavigateTo(Routes.signup);
+      _navigator.closeAllAndNavigateTo(Routes.login);
     }
   }
 
@@ -37,15 +36,13 @@ class _StartUpViewState extends State<StartUpView> {
     final width = size.width;
     final height = size.height;
     return Scaffold(
-      backgroundColor: appColor1,
+      backgroundColor: appColor,
       body: Center(
         child: SizedBox(
-          height: height /3.5,
-          width: width / 1.8,
+          height: height /5,
+          width: width / 4,
           child: Image.asset(
-            'assets/applogo.png',
-            color: Colors.white,
-            colorBlendMode: BlendMode.modulate,
+            'assets/applogoicon.png',
           ),
         ),
       ),

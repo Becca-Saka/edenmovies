@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = Routes.root;
+  static const initial = Routes.signup;
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -28,7 +28,7 @@ class AppPages {
           settings: settings,
         );
 
-      case Routes.home:
+      case Routes.mainView:
         return MaterialPageRoute<dynamic>(
           builder: (context) => const MainView(),
           settings: settings,

@@ -28,7 +28,8 @@ class AuthenticatinService {
           name,
           user.uid,
         );
-        getUserData();
+        await getUserData();
+        _navigator.closeAllAndNavigateTo(Routes.mainView);
       }
     } on FirebaseAuthException catch (e) {
       log('Error: $e');
@@ -49,6 +50,7 @@ class AuthenticatinService {
           .user;
       if (user != null) {
         await getUserData();
+        _navigator.closeAllAndNavigateTo(Routes.mainView);
       }
     } on FirebaseAuthException catch (e) {
       log('Error: $e');
@@ -68,7 +70,7 @@ class AuthenticatinService {
   ) async {
     UserDetails userDetails = UserDetails(
       email: email,
-      name: name,
+      name: '${name[0].toUpperCase()}${name.substring(1).toLowerCase()}',
       uid: userId,
     );
 
@@ -82,12 +84,10 @@ class AuthenticatinService {
       final data = res.data() as Map<String, dynamic>;
       final user = UserDetails.fromJson(data);
       locator<FeedController>().updateUserDetails(user);
-      _navigator.back();
-      _navigator.navigateTo(Routes.home);
     }
   }
 
-  saveUserWatchList(UserDetails user) async => await _userCollectionRef
+ Future<void> saveUserWatchList(UserDetails user) async => await _userCollectionRef
       .doc(user.uid)
       .update({'watchList': user.watchList});
 
@@ -97,9 +97,8 @@ class AuthenticatinService {
     User? user = _firebaseAuth.currentUser;
     if (user != null) {
       final result = await user.getIdTokenResult(true);
-      log('returning true');
-      return result.token != null ? true : false;
-    
+      await getUserData();
+      return result.token != null;
     }
     log('returning false');
     return false;
