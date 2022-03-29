@@ -14,9 +14,10 @@ class NavigationHelper {
     return navigatorKey.currentState!
         .popAndPushNamed(routeName, arguments: arguments);
   }
-  closeAllAndNavigateTo(String routeName, {Object? arguments}) {
+
+  Future<void> closeAllAndNavigateTo(String routeName, {Object? arguments}) {
     return navigatorKey.currentState!
-        .popUntil(ModalRoute.withName(routeName));
+        .pushNamedAndRemoveUntil(routeName, (Route<dynamic> route) => false);
   }
 
   void back([Object? arguments]) {

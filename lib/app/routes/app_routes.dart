@@ -7,4 +7,6 @@ abstract class Routes {
   static const mainView = '/main';
   static const singleFeedItem ='/singleFeedItem';
 
+  static const search = '/search';
+
 }

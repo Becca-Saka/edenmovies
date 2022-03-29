@@ -1,10 +1,6 @@
 import 'dart:ui';
-import 'package:edenmovies/controller/feed_controller.dart';
-import 'package:edenmovies/models/movie_details.dart';
-import 'package:edenmovies/ui/shared/const_color.dart';
-import 'package:edenmovies/ui/views/base_view.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:edenmovies/ui/widgets/star_rating.dart';
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 
 class SingleItemView extends StatelessWidget {
@@ -105,95 +101,140 @@ class SingleItemView extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                'Story Line',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                '${movieDetails.storyline} ',
-                style: TextStyle(
-                    color: Colors.grey[500],
-                    letterSpacing: 0.7,
-                    height: 1.5,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Cast & Crew',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              movieDetails.actors.isEmpty
-                  ? Text(
-                      'No Cast & Crew Found',
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Content Rating:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                  movieDetails.contentRating.isNotEmpty?      Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey[300]!),
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            '${movieDetails.contentRating} ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.grey[500],
+                                fontSize: 23,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ):const SizedBox.shrink() ,
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Story Line',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '${movieDetails.storyline} ',
                       style: TextStyle(
                           color: Colors.grey[500],
                           letterSpacing: 0.7,
                           height: 1.5,
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
-                    )
-                  : SizedBox(
-                      height: 120,
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: movieDetails.actors.map((e) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: SizedBox(
-                              width: 90,
-                              height: 70,
-                              child: Column(
-                                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: FancyShimmerImage(
-                                      imageUrl: 'https://picsum.photos/200/300',
-                                      boxFit: BoxFit.cover,
-                                      errorWidget: const Placeholder(
-                                        color: Colors.grey,
-                                      ),
-                                      width: 90,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Cast & Crew',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    movieDetails.actors.isEmpty
+                        ? Text(
+                            'No Cast & Crew Found',
+                            style: TextStyle(
+                                color: Colors.grey[500],
+                                letterSpacing: 0.7,
+                                height: 1.5,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          )
+                        : SizedBox(
+                            height: 120,
+                            child: ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              children: movieDetails.actors.map((e) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: SizedBox(
+                                    width: 90,
+                                    height: 70,
+                                    child: Column(
+                                      // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: FancyShimmerImage(
+                                            imageUrl:
+                                                'https://picsum.photos/200/300',
+                                            boxFit: BoxFit.cover,
+                                            errorWidget: const Placeholder(
+                                              color: Colors.grey,
+                                            ),
+                                            width: 90,
 
-                                      height: 80,
+                                            height: 80,
 
-                                      // height: 100,
+                                            // height: 100,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(e,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.grey[500],
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400)),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(e,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400)),
-                                ],
-                              ),
+                                );
+                              }).toList(),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                          ),
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 100,
               ),

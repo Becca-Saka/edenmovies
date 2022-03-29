@@ -1,6 +1,7 @@
 import 'package:edenmovies/models/movie_details.dart';
 import 'package:edenmovies/ui/views/login_view.dart';
 import 'package:edenmovies/ui/views/main_view.dart';
+import 'package:edenmovies/ui/views/search_view.dart';
 import 'package:edenmovies/ui/views/signup_view.dart';
 import 'package:edenmovies/ui/views/single_movie_view.dart';
 import 'package:edenmovies/ui/views/startup_view.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = Routes.signup;
+  static const initial = Routes.root;
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -45,36 +46,14 @@ class AppPages {
           },
           settings: settings,
         );
-      // case Routes.uploadView:
-      //   return MaterialPageRoute<dynamic>(
-      //     builder: (context) => const UploadView(),
-      //     settings: settings,
-      //   );
-      // case Routes.rearrangeView:
-      //   return MaterialPageRoute<dynamic>(
-      //     builder: (context) => const ReArrageImagesView(),
-      //     settings: settings,
-      //   );
-      // case Routes.singleFeedItem:
-      //   return MaterialPageRoute<dynamic>(
-      //     builder: (context) {
-      //       final arg = settings.arguments as FeedArgumnet;
-      //       return SingleFeedView(
-      //         feedArgument: arg,
-      //       );
-      //     },
-      //     settings: settings,
-      //   );
-      // case Routes.commetsView:
-      //   return MaterialPageRoute<dynamic>(
-      //     builder: (context) {
-      //       final arg = settings.arguments as FeedModel;
-      //       return CommentView(
-      //         feed: arg,
-      //       );
-      //     },
-      //     settings: settings,
-      //   );
+
+      case Routes.search:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) {
+            return const SearchView();
+          },
+          settings: settings,
+        );
 
       default:
         return MaterialPageRoute<dynamic>(

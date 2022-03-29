@@ -1,8 +1,5 @@
-import 'dart:developer';
 
-import 'package:edenmovies/controller/feed_controller.dart';
-import 'package:edenmovies/ui/shared/const_color.dart';
-import 'package:edenmovies/ui/views/base_view.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:edenmovies/ui/views/watch_list_view.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +50,7 @@ class MainView extends StatelessWidget {
   Widget getBody(FeedController controller) {
     List<Widget> pages = [
       const HomeView(),
-      WatchListView()
+      const WatchListView()
     ];
     return IndexedStack(
       index: controller.currentIndex,

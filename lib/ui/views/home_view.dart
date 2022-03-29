@@ -1,20 +1,11 @@
-import 'package:edenmovies/app/app_state.dart';
-import 'package:edenmovies/controller/feed_controller.dart';
-import 'package:edenmovies/ui/shared/const_color.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:edenmovies/ui/widgets/horizontal_list_item.dart';
 import 'package:edenmovies/ui/widgets/loading_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'base_view.dart';
-
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<FeedController>(builder: (context, controller, child) {
@@ -31,24 +22,42 @@ class _HomeViewState extends State<HomeView> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(
-                          height: 20,
+                          height: 1,
                         ),
-                        Text(
-                          'Hello ${controller.currentUser.name}',
-                          style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const Text(
-                          'Let\'s explore the upcoming movies',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Hello ${controller.currentUser.name}',
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text(
+                                  'Let\'s explore the upcoming movies',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.search,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              onPressed: controller.gotoSearch,
+                            ),
+                          ],
                         ),
                         _popularMovies(
                             controller, MediaQuery.of(context).size.height),
@@ -111,17 +120,15 @@ class _HomeViewState extends State<HomeView> {
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: img,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  color: Colors.white,
+                              FancyShimmerImage(
+                                imageUrl: item.posterurl,
+                                boxFit: BoxFit.cover,
+                                errorWidget: const Placeholder(
+                                  color: Colors.grey,
                                 ),
-                                child: ColoredBox(
-                                    color: Colors.black.withOpacity(0.5)),
+                                width: 100,
                               ),
+                              ColoredBox(color: Colors.black.withOpacity(0.5)),
                               Padding(
                                 padding: const EdgeInsets.all(18),
                                 child: Column(
@@ -162,4 +169,3 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
-

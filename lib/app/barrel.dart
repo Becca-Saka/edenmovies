@@ -1,0 +1,13 @@
+export 'package:edenmovies/app/locator.dart';
+export 'package:edenmovies/controller/authentication_controller.dart';
+export 'package:edenmovies/ui/shared/const_color.dart';
+export 'package:edenmovies/ui/widgets/app_input.dart';
+export 'package:edenmovies/ui/widgets/auth_button.dart';
+export 'package:edenmovies/app/app_state.dart';
+export 'package:edenmovies/controller/feed_controller.dart';
+export 'package:edenmovies/ui/views/base_view.dart';
+export 'package:edenmovies/helpers/navigation_helper.dart';
+export 'package:edenmovies/app/routes/app_pages.dart';
+export 'package:edenmovies/helpers/snackbar_helper.dart';
+export 'package:edenmovies/models/movie_details.dart';
+export 'package:fancy_shimmer_image/fancy_shimmer_image.dart';

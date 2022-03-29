@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:edenmovies/app/locator.dart';
 import 'package:edenmovies/app/routes/app_pages.dart';
 import 'package:edenmovies/app/app_state.dart';
@@ -20,16 +18,20 @@ class FeedController extends StateController {
   UserDetails currentUser = UserDetails();
 
   var currentIndex = 0;
+  String searchTerm = '';
+
+  List<MovieDetails> searchList = [];
 
   getData() async {
     setAppState(AppState.busy);
     final data = await ApiRepository().getData();
-    final jsonData = json.decode(data) as List<dynamic>;
-    movies = jsonData.map((movie) => MovieDetails.fromJson(movie)).toList();
-    _parseDataList();
-    
+    if (data != null) {
+      final jsonData = json.decode(data) as List<dynamic>;
+      movies = jsonData.map((movie) => MovieDetails.fromJson(movie)).toList();
+      _parseDataList();
+    }
+
     setAppState(AppState.idle);
-    
   }
 
   _parseDataList() {
@@ -76,4 +78,35 @@ class FeedController extends StateController {
   getUserWatchList() => watchList = movies
       .where((movie) => currentUser.watchList.contains(movie.id))
       .toList();
+
+  void searchMovies(String value) {
+    if (value.isNotEmpty) {
+      searchTerm = value;
+      searchList = movies
+          .where((movie) =>
+              movie.title.toLowerCase().contains(value.toLowerCase()) ||
+              movie.year.toLowerCase().contains(value.toLowerCase()) ||
+              movie.genres
+                  .where((element) =>
+                      element.toLowerCase().contains(value.toLowerCase()))
+                  .isNotEmpty ||
+              movie.actors
+                  .where((element) =>
+                      element.toLowerCase().contains(value.toLowerCase()))
+                  .isNotEmpty)
+          .toList();
+    } else {
+      clearSearch();
+    }
+    notifyListeners();
+  }
+
+  clearSearch() {
+    searchTerm = '';
+    searchList = [];
+  }
+
+  void gotoSearch() {
+    _navigator.navigateTo(Routes.search);
+  }
 }

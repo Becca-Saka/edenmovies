@@ -1,13 +1,12 @@
-import 'dart:developer';
+import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edenmovies/app/locator.dart';
-import 'package:edenmovies/app/routes/app_pages.dart';
-import 'package:edenmovies/controller/feed_controller.dart';
-import 'package:edenmovies/helpers/navigation_helper.dart';
-import 'package:edenmovies/helpers/snackbar_helper.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:edenmovies/models/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+class FirebaseHelper {}
 
 class AuthenticatinService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -19,9 +18,11 @@ class AuthenticatinService {
   Future<void> signUp(String email, String password, String name) async {
     try {
       _navigator.showLoadingDialogWithText(msg: 'Signing up...');
-      User? user = (await _firebaseAuth.createUserWithEmailAndPassword(
-              email: email, password: password))
-          .user;
+      final resp = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .timeout(const Duration(seconds: 15));
+      User? user = resp.user;
+
       if (user != null) {
         await saveUserData(
           email,
@@ -31,14 +32,19 @@ class AuthenticatinService {
         await getUserData();
         _navigator.closeAllAndNavigateTo(Routes.mainView);
       }
+    } on TimeoutException {
+      _navigator.back();
+      SnackBarHelper.showErrorSnackBar(
+          'An error occurred, plese check your internet connection');
+    } on SocketException {
+      _navigator.back();
+      SnackBarHelper.showErrorSnackBar('No internet connection');
     } on FirebaseAuthException catch (e) {
-      log('Error: $e');
       _navigator.back();
       final errorMessage = getMessageFromErrorCode(e);
       SnackBarHelper.showErrorSnackBar(errorMessage);
     } catch (e) {
       _navigator.back();
-      log(e.toString());
     }
   }
 
@@ -52,14 +58,19 @@ class AuthenticatinService {
         await getUserData();
         _navigator.closeAllAndNavigateTo(Routes.mainView);
       }
+    } on TimeoutException {
+      _navigator.back();
+      SnackBarHelper.showErrorSnackBar(
+          'An error occurred, plese check your internet connection');
+    } on SocketException {
+      _navigator.back();
+      SnackBarHelper.showErrorSnackBar('No internet connection');
     } on FirebaseAuthException catch (e) {
-      log('Error: $e');
       _navigator.back();
       final errorMessage = getMessageFromErrorCode(e);
       SnackBarHelper.showErrorSnackBar(errorMessage);
     } catch (e) {
       _navigator.back();
-      log(e.toString());
     }
   }
 
@@ -87,20 +98,24 @@ class AuthenticatinService {
     }
   }
 
- Future<void> saveUserWatchList(UserDetails user) async => await _userCollectionRef
-      .doc(user.uid)
-      .update({'watchList': user.watchList});
+  Future<void> saveUserWatchList(UserDetails user) async =>
+      await _userCollectionRef
+          .doc(user.uid)
+          .update({'watchList': user.watchList});
 
   Future<void> signOut() async => _firebaseAuth.signOut();
 
   Future<bool> isSignIn() async {
-    User? user = _firebaseAuth.currentUser;
-    if (user != null) {
-      final result = await user.getIdTokenResult(true);
-      await getUserData();
-      return result.token != null;
+    try {
+      User? user = _firebaseAuth.currentUser;
+      if (user != null) {
+        final result = await user.getIdTokenResult(true);
+        await getUserData();
+        return result.token != null;
+      }
+    } catch (e) {
+      return false;
     }
-    log('returning false');
     return false;
   }
 }

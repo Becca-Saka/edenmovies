@@ -12,13 +12,14 @@ class AuthButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     this.color = Colors.white,
-    this.hasRadius = false,
+    this.hasRadius = false, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
+      width:  double.infinity ,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               primary: color,

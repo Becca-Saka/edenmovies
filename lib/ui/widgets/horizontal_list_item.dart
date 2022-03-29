@@ -1,6 +1,4 @@
-import 'package:edenmovies/app/routes/app_pages.dart';
-import 'package:edenmovies/models/movie_details.dart';
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalMovieList extends StatelessWidget {
@@ -62,8 +60,6 @@ class HorizontalMovieList extends StatelessWidget {
                           boxFit: BoxFit.cover,
                           errorWidget: const Placeholder(color: Colors.grey ,),
                           width: 100,
-
-                          // height: 100,
                         ),
                       ),
                     ),

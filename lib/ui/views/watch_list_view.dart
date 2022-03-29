@@ -1,8 +1,4 @@
-import 'dart:developer';
-
-import 'package:edenmovies/controller/feed_controller.dart';
-import 'package:edenmovies/ui/shared/const_color.dart';
-import 'package:edenmovies/ui/views/base_view.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:flutter/material.dart';
 
 class WatchListView extends StatelessWidget {
@@ -44,29 +40,44 @@ class WatchListView extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 0.6,
-                    ),
-                    itemBuilder: (context, index) {
-                      final item = controller.watchList[index];
-                      return InkWell(
-                        onTap: () {
-                          controller.navigateToSingleItem(
-                              item, '${item.id}+watchlist');
-                        },
-                        child: Hero(
-                          tag: '${item.id}+watchlist',
-                          child: Image.network(item.posterurl),
+                  Visibility(
+                    visible: controller.watchList.isNotEmpty,
+                    replacement: SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.3,
+                      child: const Center(
+                        child: Text(
+                          'No movies in your watch list',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         ),
-                      );
-                    },
-                    itemCount: controller.watchList.length,
+                      ),
+                    ),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 4,
+                        childAspectRatio: 0.6,
+                      ),
+                      itemBuilder: (context, index) {
+                        final item = controller.watchList[index];
+                        return InkWell(
+                          onTap: () {
+                            controller.navigateToSingleItem(
+                                item, '${item.id}+watchlist');
+                          },
+                          child: Hero(
+                            tag: '${item.id}+watchlist',
+                            child: Image.network(item.posterurl),
+                          ),
+                        );
+                      },
+                      itemCount: controller.watchList.length,
+                    ),
                   ),
                 ],
               ),

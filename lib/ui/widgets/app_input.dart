@@ -8,8 +8,8 @@ class AppInput extends StatelessWidget {
     Key? key,
     required this.initialValue,
     required this.onChanged,
-    required this.labelText, this.color = Colors.white,
-
+    required this.labelText,
+    this.color = Colors.white,
   }) : super(key: key);
 
   @override
@@ -18,13 +18,19 @@ class AppInput extends StatelessWidget {
       initialValue: initialValue,
       onChanged: onChanged,
       style: TextStyle(color: color),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '$labelText cannot be empty';
+        }
+        return null;
+      },
       decoration: InputDecoration(
           labelText: labelText,
           labelStyle: TextStyle(color: Colors.grey[500]),
-          focusedBorder:  UnderlineInputBorder(
+          focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: color),
           ),
-          enabledBorder:  UnderlineInputBorder(
+          enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: color),
           )),
     );

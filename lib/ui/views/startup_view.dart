@@ -1,8 +1,4 @@
-import 'package:edenmovies/app/locator.dart';
-import 'package:edenmovies/app/routes/app_pages.dart';
-import 'package:edenmovies/controller/authentication_controller.dart';
-import 'package:edenmovies/helpers/navigation_helper.dart';
-import 'package:edenmovies/ui/shared/const_color.dart';
+import 'package:edenmovies/app/barrel.dart';
 import 'package:flutter/material.dart';
 
 class StartUpView extends StatefulWidget {
@@ -24,9 +20,9 @@ class _StartUpViewState extends State<StartUpView> {
     final _navigator = locator<NavigationHelper>();
     final status = await auth.isSignIn();
     if (status) {
-      _navigator.closeAllAndNavigateTo(Routes.mainView);
+      _navigator.closeAndNavigateTo(Routes.mainView);
     } else {
-      _navigator.closeAllAndNavigateTo(Routes.login);
+      _navigator.closeAndNavigateTo(Routes.login);
     }
   }
 
@@ -39,7 +35,7 @@ class _StartUpViewState extends State<StartUpView> {
       backgroundColor: appColor,
       body: Center(
         child: SizedBox(
-          height: height /5,
+          height: height / 5,
           width: width / 4,
           child: Image.asset(
             'assets/applogoicon.png',
